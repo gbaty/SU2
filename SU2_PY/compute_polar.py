@@ -29,6 +29,9 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with SU2. If not, see <http://www.gnu.org/licenses/>.
 
+# make print(*args) function available in PY2.6+, does'nt work on PY < 2.6
+from __future__ import print_function
+
 # imports
 import numpy as np
 from optparse import OptionParser
@@ -268,14 +271,13 @@ def main():
          # --------- end of dummy optimization variables definition section -----------------------
          #
          
-    
          # set angle of attack and side-slip angle
          konfig.AOA = AngleAttack
          konfig.SIDESLIP_ANGLE = SIDESLIP_ANGLE
          konfig.MACH_NUMBER = MachNumber
          caseName='DIRECT_M_'+str(MachNumber)+'_AOA_'+str(AngleAttack)
-         print 'Mach = ' , konfig.MACH_NUMBER , 'AOA = ' , konfig.AOA
-         print 'case :'+caseName
+         print('Mach = ' , konfig.MACH_NUMBER , 'AOA = ' , konfig.AOA)
+         print('case :'+caseName)
     
          # run su2
          if options.Wind:
