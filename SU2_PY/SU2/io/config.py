@@ -37,7 +37,7 @@
 
 import os, sys, shutil, copy
 import numpy as np
-from ..util import bunch, ordered_bunch, switch
+from ..util import Bunch, OrderedBunch, switch
 from .tools import *
 from .config_options import *
 
@@ -50,11 +50,11 @@ inf = 1.0e20
 #  Configuration Class
 # ----------------------------------------------------------------------
 
-class Config(ordered_bunch):
+class Config(OrderedBunch):
     """ config = SU2.io.Config(filename="")
         
         Starts a config class, an extension of 
-        ordered_bunch()
+        OrderedBunch()
         
         use 1: initialize by reading config file
             config = SU2.io.Config('filename')
@@ -193,7 +193,7 @@ class Config(ordered_bunch):
     def local_files(self):
         """ removes path prefix from all *_FILENAME params
         """
-        for key,value in self.iteritems():
+        for key, value in self.items():
             if key.split('_')[-1] == 'FILENAME':
                 self[key] = os.path.basename(value)    
     
@@ -277,7 +277,7 @@ class Config(ordered_bunch):
     
     def __str__(self):
         output = 'Config: %s' % self._filename
-        for k,v in self.iteritems():
+        for k,v in self.items():
             output +=  '\n    %s= %s' % (k,v)
         return output
 #: class Config
@@ -708,7 +708,6 @@ def read_config(filename):
             'PARAM': [[0.0, 0.05]],
             'SCALE': [1.0],
             'SIZE': [1]}
-
     return data_dict
     
 #: def read_config()
