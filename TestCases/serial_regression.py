@@ -1098,7 +1098,7 @@ def main():
         if (pass_list[i]):
             print('  passed - %s'%test.tag)
         else:
-            print('* FAILED - %s'%test.tag)    
+            print('* FAILED - %s'%test.tag)    y
     if all(pass_list):
         sys.exit(0)
     else:

@@ -3,18 +3,16 @@
 ## \file TestCase.py
 #  \brief Python class for automated regression testing of SU2 examples
 #  \author A. Aranake, A. Campos, T. Economon, T. Lukaczyk, S. Padron
-#  \version 5.0.0 "Raven"
+#  \version 5.0 "Raven"
 #
-# SU2 Original Developers: Dr. Francisco D. Palacios.
-#                          Dr. Thomas D. Economon.
+# SU2 Lead Developers: Dr. Francisco Palacios (Francisco.D.Palacios@boeing.com).
+#                      Dr. Thomas D. Economon (economon@stanford.edu).
 #
 # SU2 Developers: Prof. Juan J. Alonso's group at Stanford University.
 #                 Prof. Piero Colonna's group at Delft University of Technology.
 #                 Prof. Nicolas R. Gauger's group at Kaiserslautern University of Technology.
 #                 Prof. Alberto Guardone's group at Polytechnic University of Milan.
 #                 Prof. Rafael Palacios' group at Imperial College London.
-#                 Prof. Edwin van der Weide's group at the University of Twente.
-#                 Prof. Vincent Terrapon's group at the University of Liege.
 #
 # Copyright (C) 2012-2017 SU2, the open-source CFD code.
 #
@@ -31,6 +29,10 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with SU2. If not, see <http://www.gnu.org/licenses/>.
 
+# make print(*args) function available in PY2.6+, does'nt work on PY < 2.6
+from __future__ import print_function
+
+
 import time, os, subprocess, datetime, sys
 import difflib
 
@@ -46,13 +48,9 @@ class TestCase:
 
         # Indicate if the test is unsteady
         self.unsteady = False
-        
-        # Indicate if the test is a polar run
-        self.polar = False
 
         # The test condition. These must be set after initialization
         self.test_iter = 1
-        self.ntest_vals = 4
         self.test_vals = []  
 
         # These can be optionally varied 
@@ -78,12 +76,7 @@ class TestCase:
 
         # Assemble the shell command to run SU2
         logfilename = '%s.log' % os.path.splitext(self.cfg_file)[0]
-
-        # Check for polar calls
-        if self.polar:
-            command = "%s > %s" % (self.su2_exec,logfilename)
-        else:
-            command = "%s %s > %s" % (self.su2_exec, self.cfg_file,logfilename)
+        command = "%s %s > %s" % (self.su2_exec, self.cfg_file,logfilename)
 
         # Run SU2
         workdir = os.getcwd()
@@ -123,7 +116,7 @@ class TestCase:
                         iter_number = int(raw_data[0])
                         if self.unsteady:
                             iter_number = int(raw_data[1])
-                        data        = raw_data[len(raw_data)-self.ntest_vals:]    # Take the last n columns for comparison, the default is 4
+                        data        = raw_data[len(raw_data)-4:]    # Take the last 4 columns for comparison
                     except ValueError:
                         continue
                     except IndexError:
@@ -153,7 +146,7 @@ class TestCase:
 
         # Write the test results 
         #for j in output:
-        #  print j
+        #  print(j)
 
         if passed:
             print("%s: PASSED"%self.tag)
@@ -344,7 +337,7 @@ class TestCase:
 
         # Write the test results 
         #for j in output:
-        #  print j
+        #  print(j)
 
         if passed:
             print("%s: PASSED"%self.tag)
@@ -439,26 +432,34 @@ class TestCase:
             start_solver = False
             for line in output:
                 if not start_solver: # Don't bother parsing anything before SU2_GEO starts
-
-                    if line.find('Station 1') > -1:
+                    if line.find('Section 1') > -1:
                         start_solver=True
-                elif line.find('Station 2') > -1: # jump out of loop if we hit the next section
+                elif line.find('Section 2') > -1: # jump out of loop if we hit the next section
                     break
                 else:   # Found the lines; parse the input
 
-                    if line.find('Chord') > -1:
-                        raw_data = line.replace(",","").split()
-                        data.append(raw_data[1])
+                    if line.find('Maximum thickness') > -1:
+                        raw_data = line.split()
+                        data.append(raw_data[-1][:-1])
+                        found_thick = True
+
+                    elif line.find('Area') > -1:
+                        raw_data = line.split()
+                        data.append(raw_data[-1][:-1])
+                        found_area = True
+
+                    elif line.find('Twist angle') > -1:
+                        raw_data = line.split()
+                        data.append(raw_data[-1][:-1])
+                        found_twist = True
+
+                    elif line.find('Chord') > -1:
+                        raw_data = line.split()
+                        data.append(raw_data[-1][:-1])
                         found_chord = True
-                        data.append(raw_data[5])
-                        found_radius = True
-                        data.append(raw_data[8])
-                        found_toc = True
-                        data.append(raw_data[10])
-                        found_aoa = True
 
 
-            if found_chord and found_radius and found_toc and found_aoa:  # Found what we're checking for
+            if found_thick and found_area and found_twist and found_chord:  # Found what we're checking for
                 iter_missing = False
                 if not len(self.test_vals)==len(data):   # something went wrong... probably bad input
                     print("Error in test_vals!")
@@ -480,7 +481,7 @@ class TestCase:
 
         # Write the test results 
         #for j in output:
-        #  print j
+        #  print(j)
 
         if passed:
             print("%s: PASSED"%self.tag)
@@ -603,7 +604,7 @@ class TestCase:
     
         # Write the test results 
         #for j in output:
-        #  print j
+        #  print(j)
     
         if passed:
             print("%s: PASSED"%self.tag)
@@ -625,7 +626,7 @@ class TestCase:
     
         if iter_missing:
             print('ERROR: The iteration number %d could not be found.'%self.test_iter)
-    
+
         print('test_iter=%d \n'%self.test_iter, end=' ')
     
         print('test_vals (stored): ', end=' ')
