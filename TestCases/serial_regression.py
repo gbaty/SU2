@@ -1092,14 +1092,13 @@ def main():
     
     # Tests summary
     print('==================================================================')
-    print('Summary of the serial tests')
+    #print('Summary of the serial tests')
     print('python version:', sys.version)
     for i, test in enumerate(test_list):
         if (pass_list[i]):
             print('  passed - %s'%test.tag)
         else:
-            print('* FAILED - %s'%test.tag)
-    
+            print('* FAILED - %s'%test.tag)    
     if all(pass_list):
         sys.exit(0)
     else:
