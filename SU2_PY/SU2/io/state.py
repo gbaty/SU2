@@ -250,7 +250,6 @@ class State(ordered_bunch):
                   if found:
                     files[label] = filename
                     print('Found: %s' % filename)
-                  
 
                 else:
                   if os.path.exists(filename):

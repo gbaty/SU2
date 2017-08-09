@@ -79,7 +79,8 @@ def gradient( func_name, method, config, state=None ):
     grads = {}
     state = su2io.State(state)
     if func_name == 'ALL':
-        raise(Exception , "func_name = 'ALL' not yet supported")
+        raise Exception("func_name = 'ALL' not yet supported")
+
     func_output = func_name
     if (type(func_name)==list):
         if (config.OPT_COMBINE_OBJECTIVE=="YES"):
@@ -89,6 +90,7 @@ def gradient( func_name, method, config, state=None ):
     else:
         config.OPT_COMBINE_OBJECTIVE="NO"
         config.OBJECTIVE_WEIGHT = "1.0"
+
     # redundancy check
     if not state['GRADIENTS'].has_key(func_output):
 

@@ -275,9 +275,9 @@ def main():
          konfig.AOA = AngleAttack
          konfig.SIDESLIP_ANGLE = SIDESLIP_ANGLE
          konfig.MACH_NUMBER = MachNumber
-         caseName='DIRECT_M_'+str(MachNumber)+'_AOA_'+str(AngleAttack)
-         print('Mach = ' , konfig.MACH_NUMBER , 'AOA = ' , konfig.AOA)
-         print('case :'+caseName)
+         caseName = 'DIRECT_M_' + str(MachNumber) + '_AOA_' + str(AngleAttack)
+         print('Mach = ', konfig.MACH_NUMBER, 'AOA = ', konfig.AOA)
+         print('case :' + caseName)
     
          # run su2
          if options.Wind:

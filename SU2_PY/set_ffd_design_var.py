@@ -135,7 +135,7 @@ if options.dim == 3:
           dvList = dvList + "; "
 
 
-  print dvList
+  print(dvList)
 
   print(" ")
   print("% FFD_NACELLE (PHI)")
@@ -152,7 +152,7 @@ if options.dim == 3:
           dvList = dvList + "; "
 
 
-  print dvList
+  print(dvList)
 
   print(" ")
   print("% FFD_CONTROL_POINT (Z) (MULTIPLE INTERSECTIONS)")
@@ -233,7 +233,6 @@ if options.dim == 2:
 
   print(" ")
   print("% FFD_CAMBER & FFD_THICKNESS")
-
 
   iVariable = 0
   dvList = "DEFINITION_DV= "
