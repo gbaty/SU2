@@ -36,6 +36,12 @@ from __future__ import print_function
 import time, os, subprocess, datetime, sys
 import difflib
 
+
+def print_vals(vals, name="Values"):
+    """Print an array of floats."""
+    print(name + ': ' + ', '.join('{:f}'.format(j) for v in vals))
+
+
 class TestCase:
 
     def __init__(self,tag_in):
@@ -170,7 +176,6 @@ class TestCase:
             print('ERROR: The iteration number %d could not be found.'%self.test_iter)
 
         print('test_iter=%d \n'%self.test_iter, end=' ')
-
         print('test_vals (stored): ', end=' ')
         for j in self.test_vals:
             print('%f,'%j, end=' ')
@@ -362,20 +367,11 @@ class TestCase:
 
         print('test_iter=%d \n'%self.test_iter, end=' ')
 
-        print('test_vals (stored): ', end=' ')
-        for j in self.test_vals:
-            print('%f,'%j, end=' ')
-        print('\n', end=' ')
+        print_vals(self.test_vals, name="test_vals (stored)")
 
-        print('sim_vals (computed): ', end=' ')
-        for j in sim_vals:
-            print('%f,'%j, end=' ')
-        print('\n', end=' ')
+        print_vals(sim_vals, name="sim_vals (computed)")
 
-        print('delta_vals: ', end=' ')
-        for j in delta_vals:
-            print('%f,'%j, end=' ')
-        print('\n', end=' ')
+        print_vals(delta_vals, name="delta_vals")
 
         print('test duration: %.2f min'%(running_time/60.0)) 
         print('==================== End Test: %s ====================\n'%self.tag)
@@ -503,21 +499,11 @@ class TestCase:
 
         if iter_missing:
             print('ERROR: The SU2_GEO values could not be found.')
+        print_vals(self.test_vals, name="test_vals (stored)")
 
-        print('test_vals (stored): ', end=' ')
-        for j in self.test_vals:
-            print('%f,'%j, end=' ')
-        print('\n', end=' ')
+        print_vals(sim_vals, name="sim_vals (computed)")
 
-        print('sim_vals (computed): ', end=' ')
-        for j in sim_vals:
-            print('%f,'%j, end=' ')
-        print('\n', end=' ')
-
-        print('delta_vals: ', end=' ')
-        for j in delta_vals:
-            print('%f,'%j, end=' ')
-        print('\n', end=' ')
+        print_vals(delta_vals, name="delta_vals")
 
         print('test duration: %.2f min'%(running_time/60.0)) 
         print('==================== End Test: %s ====================\n'%self.tag)
@@ -626,26 +612,17 @@ class TestCase:
     
         if iter_missing:
             print('ERROR: The iteration number %d could not be found.'%self.test_iter)
+    
+        print('test_iter=%d' % self.test_iter)
 
-        print('test_iter=%d \n'%self.test_iter, end=' ')
-    
-        print('test_vals (stored): ', end=' ')
-        for j in self.test_vals:
-            print('%e'%j, end=' ')
-        print('\n', end=' ')
-    
-        print('sim_vals (computed): ', end=' ')
-        for j in sim_vals:
-            print('%e'%j, end=' ')
-        print('\n', end=' ')
-    
-        print('delta_vals: ', end=' ')
-        for j in delta_vals:
-            print('%e'%j, end=' ')
-        print('\n', end=' ')
-    
-        print('test duration: %.2f min'%(running_time/60.0)) 
-        print('==================== End Test: %s ====================\n'%self.tag)
+        print_vals(self.test_vals, name="test_vals (stored)")
+
+        print_vals(sim_vals, name="sim_vals (computed)")
+
+        print_vals(delta_vals, name="delta_vals")
+ 
+        print('test duration: %.2f min'%(running_time/60.0))
+        #print('==================== End Test: %s ====================\n'%self.tag)
     
         os.chdir(workdir)
         return passed    
